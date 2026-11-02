@@ -1,0 +1,13 @@
+*chrome_profile*
+*exported_replays*
+*__pycache__*
+*.pyc
+*.log
+*.bak
+*.pid
+data/*
+data/*/*
+*.wotbreplay
+*.wotreplay
+.venv/*
+venv/*

@@ -1,0 +1,14 @@
+.venv/
+venv/
+.cl_apps_venv
+chrome_profile/
+data/
+exported_replays/
+dist/
+build/
+__pycache__/
+*.pyc
+*.log
+*.bak
+*.pid
+.tmp

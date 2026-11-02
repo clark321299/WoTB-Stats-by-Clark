@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <rect width="512" height="512" rx="80" fill="#0a0e17"/>
+  <text x="256" y="200" text-anchor="middle" font-family="Arial,sans-serif" font-size="120" font-weight="bold" fill="#f5a623">CL</text>
+  <text x="256" y="340" text-anchor="middle" font-family="Arial,sans-serif" font-size="60" font-weight="bold" fill="#e8852a">STATS</text>
+  <rect x="100" y="370" width="312" height="4" rx="2" fill="#f5a623" opacity="0.5"/>
+</svg>

@@ -1,0 +1,14 @@
+# Локальне й особисте — не в git.
+chrome_profile/
+data/
+exported_replays/
+__pycache__/
+*.pyc
+*.log
+*.bak
+*.pid
+.venv/
+venv/
+tools/.build/
+dist/
+build/
