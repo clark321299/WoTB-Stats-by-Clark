@@ -28,9 +28,9 @@ The ready downloads will be in [Releases](https://github.com/clark321299/WoTB-St
 
 - **Windows** — a folder with `WoTB Stats by Clark.exe`. Unzip it and start the exe. The exe is not code-signed. If SmartScreen appears: **More info → Run anyway**.
 - **macOS** — `WoTB Stats by Clark.app`. Right-click → **Open**. That file can only be built on a Mac, so it is not here yet.
-- **Linux** — there is no separate exe. Once: `./setup_linux.sh`, then `./CL-Stats-Desktop/запуск.sh`.
+- **Linux** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0): unzip and start `WoTB Stats by Clark`. A terminal stays open while the app runs.
 
-Those release files are not attached yet. The Windows folder is already packed on a Windows PC. It goes up here after a check that the new exe opens. Do not give anyone the `data` or `chrome_profile` folders that appear next to the exe after the first launch.
+[Release 1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) has the Windows and Linux folders. Do not give anyone the `data` or `chrome_profile` folders that appear next to the app after the first launch.
 
 ### Build it yourself
 
@@ -86,9 +86,9 @@ Export a zip from the top bar before you move to another computer. Do not copy a
 
 - **Windows** — тека з `WoTB Stats by Clark.exe`. Розпакував і запустив exe. Підпису немає. Якщо SmartScreen завадить: **Додаткові відомості → Усе одно запустити**.
 - **macOS** — `WoTB Stats by Clark.app`. Правий клік → **Відкрити**. Цей файл збирається лише на Mac, тому його ще немає.
-- **Linux** — окремого exe немає. Один раз `./setup_linux.sh`, далі `./CL-Stats-Desktop/запуск.sh`.
+- **Linux** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0): розпакуй і запусти `WoTB Stats by Clark`. Поки застосунок працює, лишається відкритим термінал.
 
-Цих файлів у Releases ще немає. Тека для Windows уже зібрана на Windows-комп’ютері. Сюди вона ляже після перевірки, що новий exe відкривається. Теки `data` і `chrome_profile`, які з’являються біля exe після першого запуску, іншим не віддавай.
+[Випуск 1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) містить теки Windows і Linux. Теки `data` і `chrome_profile`, які з’являються поруч після першого запуску, іншим не віддавай.
 
 ### Зібрати самому
 
@@ -144,9 +144,9 @@ cd CL-Stats-Desktop
 
 - **Windows** — папка с `WoTB Stats by Clark.exe`. Распаковал и запустил exe. Подписи нет. Если SmartScreen мешает: **Подробнее → Всё равно выполнить**.
 - **macOS** — `WoTB Stats by Clark.app`. Правый клик → **Открыть**. Этот файл собирается только на Mac, поэтому его ещё нет.
-- **Linux** — отдельного exe нет. Один раз `./setup_linux.sh`, дальше `./CL-Stats-Desktop/запуск.sh`.
+- **Linux** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0): распакуй и запусти `WoTB Stats by Clark`. Пока приложение работает, остаётся открытым терминал.
 
-Этих файлов в Releases ещё нет. Папка для Windows уже собрана на Windows-компьютере. Сюда она ляжет после проверки, что новый exe открывается. Папки `data` и `chrome_profile`, которые появляются рядом с exe после первого запуска, другим не отдавай.
+[Выпуск 1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) содержит папки Windows и Linux. Папки `data` и `chrome_profile`, которые появляются рядом после первого запуска, другим не отдавай.
 
 ### Собрать самому
 
