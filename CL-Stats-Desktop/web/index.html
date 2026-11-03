@@ -1381,6 +1381,12 @@
             cursor:pointer;line-height:1.3
         }
         .profile-rename-btn:hover{border-color:var(--acc);color:var(--t1);background:var(--hover)}
+        .profile-delete-btn{
+            flex-shrink:0;border:1px solid var(--brd);background:var(--bg3);color:var(--t2);
+            border-radius:4px;padding:2px 7px;font:inherit;font-size:.72rem;font-weight:700;
+            cursor:pointer;line-height:1.3
+        }
+        .profile-delete-btn:hover{border-color:#e74c3c;color:#e74c3c;background:var(--hover)}
         .profile-badge{
             font-size:.65rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;
             padding:2px 6px;border-radius:4px;border:1px solid var(--brd);color:var(--t2);background:var(--bg3)
@@ -3437,6 +3443,7 @@ function _profileListHtml() {
             <span class="pbadges">
                 ${badges.join("")}
                 <button type="button" class="profile-rename-btn" data-rename="${escHtml(p.id)}" title="Перейменувати">✎</button>
+                <button type="button" class="profile-delete-btn" data-delete="${escHtml(p.id)}" title="Видалити профіль">×</button>
             </span>
         </div>`;
     }).join("");
@@ -3462,6 +3469,13 @@ function profileRefreshUi() {
                 e.preventDefault();
                 e.stopPropagation();
                 profileRename(btn.getAttribute("data-rename"));
+            });
+        });
+        list.querySelectorAll("button.profile-delete-btn[data-delete]").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                profileDelete(btn.getAttribute("data-delete"));
             });
         });
     });
@@ -3638,6 +3652,39 @@ async function profileCreate() {
         else await profileBoot();
     } catch (e) {
         if (err) err.textContent = String(e.message || e);
+    }
+}
+
+async function profileDelete(id) {
+    const row = (_profileState.profiles || []).find(p => p.id === id);
+    const name = (row && row.name) || "";
+    if (!confirm(`Видалити профіль «${name}» разом із його сесіями і боями? Це не скасувати.`)) return;
+    let pin = "";
+    if (row && row.pin_enabled) {
+        const entered = prompt("PIN цього профілю:");
+        if (entered == null || !String(entered).trim()) return;
+        pin = String(entered);
+    }
+    const wasActive = id === _profileState.active_id;
+    try {
+        const r = await fetch("/api/profiles/delete", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id, pin }),
+        });
+        const d = await r.json();
+        if (!d.ok) {
+            alert(d.error === "bad_pin" ? "Невірний PIN" : (d.error || "помилка"));
+            return;
+        }
+        if (wasActive || !d.ready) {
+            location.reload();
+            return;
+        }
+        _profileState = { ..._profileState, ...d };
+        profileRefreshUi();
+    } catch (e) {
+        alert(String(e.message || e));
     }
 }
 
@@ -12631,8 +12678,7 @@ function _olenWinFocusChipsHtml(chips, emptyHtml) {
 function _olenSetTankShort(name) {
     const s = String(name || "").trim();
     if (!s) return "?";
-    if (s.length <= 14) return s;
-    return s.slice(0, 12) + "…";
+    return s;
 }
 
 function _olenFmtAvgDelta(avg) {
@@ -13798,13 +13844,20 @@ function _olenRollCanonName(s) {
             if (loose && tankSpecsByCode[loose] && tankSpecsByCode[loose].name) {
                 return String(tankSpecsByCode[loose].name).trim();
             }
+            let best = "";
+            let bestLen = -1;
             for (const ent of Object.values(tankSpecsByCode)) {
                 if (!ent || !ent.name) continue;
                 const en = _olenRollNormKey(ent.name);
-                if (nk && en && (nk === en || (nk.length >= 4 && en.includes(nk)) || (en.length >= 4 && nk.includes(en)))) {
-                    return String(ent.name).trim();
+                if (!nk || !en) continue;
+                // «T110» розгортається в T110E5, а не навпаки: коротша назва всередині довшої не перемагає.
+                const hit = nk === en || (nk.length >= 4 && en.startsWith(nk) && en.length >= nk.length);
+                if (hit && en.length > bestLen) {
+                    best = String(ent.name).trim();
+                    bestLen = en.length;
                 }
             }
+            if (best) return best;
         }
     } catch (_) {}
     try {

@@ -479,6 +479,35 @@ def logout() -> dict[str, Any]:
     return {"ok": True, "active_id": _active_id, "ready": False, "unlocked": False}
 
 
+def delete_profile(profile_id: str, pin: str = "") -> dict[str, Any]:
+    """Прибрати профіль і його теку. Вийти з профілю дані не чіпає."""
+    global _active_id, _unlocked
+    row = _find(str(profile_id or "").strip())
+    if not row:
+        return {"ok": False, "error": "not_found"}
+    pid = str(row["id"])
+    if not _ID_RE.fullmatch(pid):
+        return {"ok": False, "error": "bad_id"}
+    if row.get("pin_enabled") and not verify_pin(
+        pin, str(row.get("pin_salt") or ""), str(row.get("pin_hash") or "")
+    ):
+        return {"ok": False, "error": "bad_pin"}
+    _registry["profiles"] = [
+        p for p in (_registry.get("profiles") or []) if str(p.get("id")) != pid
+    ]
+    if str(_registry.get("active_id") or "") == pid:
+        _registry["active_id"] = None
+    if _active_id == pid:
+        _active_id = None
+        _unlocked = False
+    _save_registry()
+    pdir = os.path.abspath(profile_dir(pid))
+    root = os.path.abspath(profiles_root())
+    if os.path.commonpath([pdir, root]) == root and pdir != root and os.path.isdir(pdir):
+        shutil.rmtree(pdir, ignore_errors=True)
+    return {"ok": True, "deleted": pid, **list_profiles()}
+
+
 def reload_registry() -> dict[str, Any]:
     """Перечитати profiles.json з диска (після zip-імпорту)."""
     global _registry
@@ -1010,7 +1039,30 @@ def _selfcheck_zip_slip() -> None:
         shutil.rmtree(outside, ignore_errors=True)
 
 
+def _selfcheck_delete_profile() -> None:
+    import tempfile
+
+    td = tempfile.mkdtemp(prefix="wots-del-")
+    try:
+        init(td)
+        assert create_profile("Повний", profile_id="main")["ok"]
+        assert create_profile("Порожній", profile_id="clark")["ok"]
+        select_profile("main")
+        marker = os.path.join(profile_dir("clark"), "cl_stats.sqlite")
+        os.makedirs(profile_dir("clark"), exist_ok=True)
+        open(marker, "wb").write(b"SQLite format 3\x00")
+        out = delete_profile("clark")
+        assert out["ok"] and out["active_id"] == "main" and out["ready"], out
+        assert not os.path.isdir(profile_dir("clark"))
+        assert {p["id"] for p in out["profiles"]} == {"main"}
+        gone = delete_profile("main")
+        assert gone["ok"] and not gone["ready"] and not os.path.isdir(profile_dir("main"))
+    finally:
+        shutil.rmtree(td, ignore_errors=True)
+
+
 if __name__ == "__main__":
     _selfcheck_empty_sqlite_not_a_profile()
     _selfcheck_zip_slip()
+    _selfcheck_delete_profile()
     print("ok")

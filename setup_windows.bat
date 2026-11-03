@@ -1,22 +1,17 @@
 @echo off
-REM First-time setup for WoTB Stats by Clark on Windows 10/11 (Python 3.10+).
+REM First-time setup for WoTB Stats by Clark on Windows 10/11 (Python 3.12).
 setlocal EnableExtensions
 cd /d "%~dp0"
 
 echo === WoTB Stats by Clark — Windows setup ===
 
-where py >nul 2>&1
-if %ERRORLEVEL%==0 (
-  set "PY=py -3"
-) else (
-  where python >nul 2>&1
-  if errorlevel 1 (
-    echo Потрібен Python 3.10+. Встанови з https://www.python.org/downloads/
-    echo У інсталяторі увімкни "Add python.exe to PATH".
-    exit /b 1
-  )
-  set "PY=python"
+py -3.12 --version >nul 2>&1
+if errorlevel 1 (
+  echo Потрібен Python 3.12. Встанови з https://www.python.org/downloads/
+  echo У інсталяторі увімкни "Add python.exe to PATH". Новіший Python ламає lz4.
+  exit /b 1
 )
+set "PY=py -3.12"
 
 set "VENV_DIR=%~dp0.venv"
 if defined CL_APPS_VENV set "VENV_DIR=%CL_APPS_VENV%"

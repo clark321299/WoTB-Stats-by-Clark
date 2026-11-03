@@ -8,6 +8,7 @@ __pycache__/
 *.bak
 *.pid
 .venv/
+.venv312/
 venv/
 tools/.build/
 dist/

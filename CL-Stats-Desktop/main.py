@@ -319,6 +319,20 @@ def api_profiles_logout():
     return jsonify({**out, **profiles.list_profiles()})
 
 
+@app.route("/api/profiles/delete", methods=["POST"])
+def api_profiles_delete():
+    """Видалити профіль і його теку. Logout цього не робить."""
+    body = request.get_json(silent=True) or {}
+    pid = str(body.get("id") or "").strip()
+    if not pid:
+        return jsonify({"ok": False, "error": "id_required"}), 400
+    out = profiles.delete_profile(pid, str(body.get("pin") or ""))
+    if not out.get("ok"):
+        code = 401 if out.get("error") == "bad_pin" else (404 if out.get("error") == "not_found" else 400)
+        return jsonify(out), code
+    return jsonify(out)
+
+
 @app.route("/api/session-store/status")
 def session_store_status():
     return jsonify(sess_store.get_status())
@@ -5992,14 +6006,16 @@ def api_tank_display_names():
         import re as _re
         for row in tank_specs_book.list_unique():
             code = str(row.get("internal_id") or row.get("code") or "").strip()
+            catalog = str(row.get("name") or "").strip()
             hangar = ""
             try:
-                hangar = str(tank_spec.hangar_name(code) or row.get("name") or "").strip()
+                hangar = str(tank_spec.hangar_name(code) or "").strip()
             except Exception:
-                hangar = str(row.get("name") or "").strip()
-            if not hangar:
+                hangar = ""
+            shown = tank_spec.full_tank_label(catalog, hangar)
+            if not shown:
                 continue
-            probes = [code, row.get("name"), hangar]
+            probes = [code, catalog, hangar, shown]
             m = _re.match(r"^[A-Za-z]{1,4}\d+_(.+)$", code)
             if m:
                 probes.append(m.group(1))
@@ -6007,7 +6023,7 @@ def api_tank_display_names():
             for probe in probes:
                 nk = tank_prof._norm_key(str(probe or ""))
                 if nk:
-                    by_name[nk] = hangar
+                    by_name[nk] = shown
         for alias, canon in (getattr(tank_spec, "_HANGAR_ALIASES", {}) or {}).items():
             nk = tank_prof._norm_key(alias)
             if nk:
@@ -6034,11 +6050,12 @@ def api_tank_display_names():
                 continue
             try:
                 h = str(tank_spec.hangar_name(wg_name) or "").strip()
-                if h and h != wg_name:
-                    by_tank_id[str(tid)] = h
+                full = tank_spec.full_tank_label(wg_name, h)
+                if full and full != wg_name:
+                    by_tank_id[str(tid)] = full
                     nk = tank_prof._norm_key(wg_name)
                     if nk:
-                        by_name[nk] = h
+                        by_name[nk] = full
             except Exception:
                 pass
     except Exception as e:
@@ -6228,13 +6245,15 @@ def api_tank_specs_index():
         code = str(row.get("internal_id") or row.get("code") or "").strip()
         if not code:
             continue
+        catalog = str(row.get("name") or "").strip()
         hangar = ""
         try:
-            hangar = str(tank_spec.hangar_name(code) or row.get("name") or "").strip()
+            hangar = str(tank_spec.hangar_name(code) or "").strip()
         except Exception:
-            hangar = str(row.get("name") or "").strip()
+            hangar = ""
+        shown = tank_spec.full_tank_label(catalog, hangar)
         entry = {
-            "name": hangar or str(row.get("name") or ""),
+            "name": shown,
             "tier": int(row.get("tier") or 0),
             "class": str(row.get("class") or ""),
             "wg_type": str(row.get("wg_type") or ""),
@@ -6245,11 +6264,11 @@ def api_tank_specs_index():
             _put(m.group(1), entry)
             # «AC 17 Alcyone» з tech-хвоста AC_17_Alcyone
             _put(m.group(1).replace("_", " "), entry)
-        if entry["name"]:
-            _put(entry["name"], entry)
-        raw_name = str(row.get("name") or "").strip()
-        if raw_name and raw_name != entry["name"]:
-            _put(raw_name, entry)
+        if shown:
+            _put(shown, entry)
+        # Короткий ангар лишається ключем, але в таблиці бою показуємо повну назву.
+        if hangar and hangar != shown:
+            _put(hangar, entry)
 
     # Явні синоніми (Spz 57 Rh → Rhm. Pzw. тощо)
     try:

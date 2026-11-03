@@ -966,3 +966,39 @@ def hangar_name(name_or_code: str, *, data_dir: str | None = None) -> str:
     if ak5 in _HANGAR_ALIASES:
         return _HANGAR_ALIASES[ak5]
     return out
+
+
+def full_tank_label(catalog: str, hangar: str) -> str:
+    """Назва в бою: повна з каталогу, не обрізаний хвіст техкоду.
+
+    T110 → T110E5, 60TP → 60TP Lewandowskiego, T-100 → T-100 LT.
+    Якщо каталог і ангар різні і жоден не є обрізкою іншого, лишається каталог
+    (AC Atlas, а не AC 17 Alcyone).
+    """
+    c = str(catalog or "").strip()
+    h = str(hangar or "").strip()
+    if not c:
+        return h
+    if not h or h == c:
+        return c
+
+    def norm(s: str) -> str:
+        return re.sub(r"[^a-z0-9а-яіїєґ]+", "", s.lower())
+
+    if h in _HANGAR_ALIASES.values():
+        return h
+    cn, hn = norm(c), norm(h)
+    if cn and hn and (cn.startswith(hn) or hn.startswith(cn) or hn in cn or cn in hn):
+        return c if len(cn) >= len(hn) else h
+    return c
+
+
+if __name__ == "__main__":
+    assert full_tank_label("T110E5", "T110") == "T110E5"
+    assert full_tank_label("60TP Lewandowskiego", "60TP") == "60TP Lewandowskiego"
+    assert full_tank_label("Carro 45t", "Car Comb 45t") == "Carro 45t"
+    assert full_tank_label("T-100 LT", "T-100") == "T-100 LT"
+    assert full_tank_label("AC Atlas", "AC 17 Alcyone") == "AC Atlas"
+    assert full_tank_label("AC 17 Alcyone", "AC Atlas") == "AC Atlas"
+    assert full_tank_label("", "T110E3") == "T110E3"
+    print("ok")

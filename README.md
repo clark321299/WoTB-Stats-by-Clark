@@ -28,15 +28,16 @@ The ready downloads will be in [Releases](https://github.com/clark321299/WoTB-St
 
 - **Windows** — a folder with `WoTB Stats by Clark.exe`. Unzip it and start the exe. The exe is not code-signed. If SmartScreen appears: **More info → Run anyway**.
 - **macOS** — `WoTB Stats by Clark.app`. Right-click → **Open**. That file can only be built on a Mac, so it is not here yet.
-- **Linux** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0): unzip and start `WoTB Stats by Clark`. A terminal stays open while the app runs.
+- **Linux** — [v1.1](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.1): unzip and start `WoTB Stats by Clark`. A terminal stays open while the app runs.
+- **Windows** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) still has the previous exe. A newer exe needs a build on Windows with Python 3.12.
 
-[Release 1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) has the Windows and Linux folders. Do not give anyone the `data` or `chrome_profile` folders that appear next to the app after the first launch.
+[Release 1.1](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.1) has the current Linux folder. Do not give anyone the `data` or `chrome_profile` folders that appear next to the app after the first launch.
 
 ### Build it yourself
 
 Only for packing the app.
 
-Windows, on Windows, Python 3.10+ the first time:
+Windows, on Windows, Python 3.12 the first time:
 
 ```bat
 setup_windows.bat
@@ -86,15 +87,16 @@ Export a zip from the top bar before you move to another computer. Do not copy a
 
 - **Windows** — тека з `WoTB Stats by Clark.exe`. Розпакував і запустив exe. Підпису немає. Якщо SmartScreen завадить: **Додаткові відомості → Усе одно запустити**.
 - **macOS** — `WoTB Stats by Clark.app`. Правий клік → **Відкрити**. Цей файл збирається лише на Mac, тому його ще немає.
-- **Linux** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0): розпакуй і запусти `WoTB Stats by Clark`. Поки застосунок працює, лишається відкритим термінал.
+- **Linux** — [v1.1](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.1): розпакуй і запусти `WoTB Stats by Clark`. Поки застосунок працює, лишається відкритим термінал.
+- **Windows** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) досі має попередній exe. Новий exe збирається на Windows з Python 3.12.
 
-[Випуск 1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) містить теки Windows і Linux. Теки `data` і `chrome_profile`, які з’являються поруч після першого запуску, іншим не віддавай.
+[Випуск 1.1](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.1) містить поточну теку Linux. Теки `data` і `chrome_profile`, які з’являються поруч після першого запуску, іншим не віддавай.
 
 ### Зібрати самому
 
 Лише для того, хто пакує застосунок.
 
-Windows, на самому Windows, Python 3.10+ перший раз:
+Windows, на самому Windows, Python 3.12 перший раз:
 
 ```bat
 setup_windows.bat
@@ -144,15 +146,16 @@ cd CL-Stats-Desktop
 
 - **Windows** — папка с `WoTB Stats by Clark.exe`. Распаковал и запустил exe. Подписи нет. Если SmartScreen мешает: **Подробнее → Всё равно выполнить**.
 - **macOS** — `WoTB Stats by Clark.app`. Правый клик → **Открыть**. Этот файл собирается только на Mac, поэтому его ещё нет.
-- **Linux** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0): распакуй и запусти `WoTB Stats by Clark`. Пока приложение работает, остаётся открытым терминал.
+- **Linux** — [v1.1](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.1): распакуй и запусти `WoTB Stats by Clark`. Пока приложение работает, остаётся открытым терминал.
+- **Windows** — [v1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) всё ещё со старым exe. Новый exe собирается на Windows с Python 3.12.
 
-[Выпуск 1.0](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.0) содержит папки Windows и Linux. Папки `data` и `chrome_profile`, которые появляются рядом после первого запуска, другим не отдавай.
+[Выпуск 1.1](https://github.com/clark321299/WoTB-Stats-by-Clark/releases/tag/v1.1) содержит текущую папку Linux. Папки `data` и `chrome_profile`, которые появляются рядом после первого запуска, другим не отдавай.
 
 ### Собрать самому
 
 Только для того, кто пакует приложение.
 
-Windows, на самом Windows, Python 3.10+ в первый раз:
+Windows, на самом Windows, Python 3.12 в первый раз:
 
 ```bat
 setup_windows.bat
